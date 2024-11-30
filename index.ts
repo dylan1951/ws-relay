@@ -9,7 +9,7 @@ wss.on('connection', function connection(ws) {
         // Broadcast to all clients
         wss.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(`Broadcast message: ${data}`);
+                client.send(data.toString());
             }
         });
     });
