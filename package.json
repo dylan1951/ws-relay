@@ -1,0 +1,19 @@
+{
+  "name": "x-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ws": "^8.18.0",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.13"
+  }
+}
