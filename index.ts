@@ -16,7 +16,11 @@ wss.on('connection', function connection(ws) {
         // Broadcast to all clients
         wss.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(data.toString());
+                ws.send(data.toString(), (err) => {
+                    if (err) {
+                        console.error('Send error:', err);
+                    }
+                });
             }
         });
     });
