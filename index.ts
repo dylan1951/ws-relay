@@ -1,6 +1,7 @@
 import { WebSocketServer, WebSocket } from 'ws';
 
 function heartbeat() {
+    console.log("received pong")
     this.isAlive = true;
 }
 
@@ -13,6 +14,7 @@ wss.on('connection', function connection(ws) {
     ws.on('error', console.error);
 
     ws.on('message', function message(data) {
+        console.log(`received a message, sending to ${wss.clients.size} clients`)
         // Broadcast to all clients
         wss.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
@@ -33,6 +35,8 @@ const interval = setInterval(function ping() {
             console.log('Terminating client due to no pong');
             return ws.terminate();
         }
+
+        console.log("sending ping")
 
         ws.isAlive = false;
         ws.ping(); // Send a ping to the client
