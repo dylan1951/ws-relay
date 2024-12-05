@@ -1,12 +1,12 @@
-import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { WebSocketServer } from 'ws';
+import { createServer, Http2ServerResponse } from 'http2';
 
-const wss = new WebSocketServer({ port: 8080 });
+const sseClients: Set<Http2ServerResponse> = new Set();
 
-const sseClients: Set<ServerResponse> = new Set();
+const server = createServer((req, res) => {
+    const { method, url } = req;
 
-const server = createServer((req: IncomingMessage, res: ServerResponse) => {
-    if (req.url === '/events') {
+    if (url === '/events') {
+        // Handle SSE client connections
         res.writeHead(200, {
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
@@ -18,22 +18,24 @@ const server = createServer((req: IncomingMessage, res: ServerResponse) => {
         req.on('close', () => {
             sseClients.delete(res);
         });
+    } else if (url === '/ingest' && method === 'POST') {
+        let body = '';
+        req.on('data', (chunk) => {
+            body += chunk.toString();
+        });
+
+        req.on('end', () => {
+            // Relay ingested data to all SSE clients
+            for (const client of sseClients) {
+                client.write(`data: ${body}\n\n`);
+            }
+            res.writeHead(204).end();
+        });
     } else {
         res.writeHead(404).end();
     }
 });
 
-wss.on('connection', (ws) => {
-    ws.on('error', console.error);
-
-    ws.on('message', (data) => {
-        // Relay WebSocket messages to all SSE clients
-        for (const client of sseClients) {
-            client.write(`data: ${data}\n\n`);
-        }
-    });
-});
-
 server.listen(80, () => {
-    console.log('SSE server running on http://localhost:80');
+    console.log('HTTP/2 Server running on http://localhost:80');
 });
