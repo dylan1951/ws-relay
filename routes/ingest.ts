@@ -9,7 +9,7 @@ export default async function ingestRoutes(server: FastifyInstance, opts: { even
 
         eventEmitter.emit('event', {
             event: 'tweet',
-            data: req.body,
+            data: JSON.stringify(req.body),
         });
     });
 
@@ -18,7 +18,7 @@ export default async function ingestRoutes(server: FastifyInstance, opts: { even
 
         eventEmitter.emit('event', {
             event: 'article',
-            data: req.body,
+            data: JSON.stringify(req.body),
         });
     });
 }
