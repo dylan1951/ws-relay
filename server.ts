@@ -20,7 +20,7 @@ server.get('/events', (req, res) => {
     );
 });
 
-server.listen({ port: 80 }, (err, address) => {
+server.listen({ port: 80, host: '0.0.0.0' }, (err, address) => {
     if (err) throw err
     console.log(`Server is now listening on ${address}`);
 });
