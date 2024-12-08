@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "tsx index.ts"
+    "start": "tsx server.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "ws": "^8.18.0",
-    "tsx": "^4.19.2"
+    "fastify": "^5.1.0",
+    "fastify-sse-v2": "^4.2.1",
+    "tsx": "^4.19.2",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/ws": "^8.5.13"

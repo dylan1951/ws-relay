@@ -5,8 +5,6 @@ const sseClients: Set<Http2ServerResponse> = new Set();
 const server = createServer((req, res) => {
     const { method, url } = req;
 
-    console.log("received smth")
-
     if (url === '/events') {
         // Handle SSE client connections
         res.writeHead(200, {
@@ -21,8 +19,6 @@ const server = createServer((req, res) => {
             sseClients.delete(res);
         });
     } else if (url === '/ingest' && method === 'POST') {
-        console.log("ingesting data")
-
         let body = '';
         req.on('data', (chunk) => {
             body += chunk.toString();
@@ -34,7 +30,6 @@ const server = createServer((req, res) => {
                 client.write(`data: ${body}\n\n`);
             }
 
-            console.log("writing response")
             res.writeHead(204).end();
         });
     } else {
